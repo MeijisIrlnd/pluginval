@@ -14,12 +14,19 @@ endif()
 # Adds all the module sources so they appear correctly in the IDE
 set_property(GLOBAL PROPERTY USE_FOLDERS YES)
 option(JUCE_ENABLE_MODULE_SOURCE_GROUPS "Enable Module Source Groups" ON)
+# MeijisIrld -
+# git submodules for juce (especially on my wifi) can be kinda annoying - using FetchContent instead
+# Also, using the Kalide fork of JUCE for consistency across our projects
+include(FetchContent)
+set(FETCH_CONTENT_QUIET OFF)
+FetchContent_Declare(
+    JUCE
+    GIT_REPOSITORY https://github.com/KalideMusic/JUCE.git
+    GIT_SHALLOW ON
+    #[[FIND_PACKAGE_ARGS 7.0.3 GLOBAL]]
+)
+FetchContent_MakeAvailable(JUCE)
 
-option(PLUGINVAL_FETCH_JUCE "Fetch JUCE along with PluginVal" ON)
-
-if(PLUGINVAL_FETCH_JUCE)
-    add_subdirectory(modules/juce)
-endif()
 
 if (DEFINED ENV{VST2_SDK_DIR})
     MESSAGE(STATUS "Building with VST2 SDK: $ENV{VST2_SDK_DIR}")

@@ -8,7 +8,9 @@ pluginval is a cross-platform plugin validator and tester application. It is des
 
 If you are a plugin user looking to report a problem with a plugin to the developers, you can use `pluginval` to create a detailed log which can drastically improve the time to fix issues. Please follow the instructions here to get started: [Testing plugins with pluginval](<docs/Testing plugins with pluginval.md>)
 
-
+###### Fork info: 
+    - Patched in special behaviour to BasicTests/PluginStateRestoration to fix false positives with bool params.
+    - Use FetchContent for JUCE dep and remove the submodule
 ###### Highlights:
   - Test VST/AU/VST3 plugins
   - Compatible with macOS/Windows/Linux
