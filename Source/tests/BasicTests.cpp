@@ -278,7 +278,7 @@ struct PluginStateTestRestoration : public PluginTest {
         // Set random parameter values
         for (auto parameter : getNonBypassAutomatableParameters(instance)) {
             // MeijisIrlnd - special case for bool params..
-            const auto isBool = parameter->isBoolean();
+            const auto isBool = parameter->isBoolean() || (parameter->getNumSteps() == 2 && parameter->isDiscrete());
             const auto originalValue = isBool ? std::roundf(parameter->getValue()) : parameter->getValue();
             const auto valueToSet = isBool ? std::roundf(r.nextFloat()) : r.nextFloat();
             parameter->setValue(valueToSet);
@@ -287,7 +287,12 @@ struct PluginStateTestRestoration : public PluginTest {
             callSetStateInformationOnMessageThreadIfVST3(instance, originalState);
 
             // Check parameter values return to original
-            ut.expectWithinAbsoluteError(parameter->getValue(), originalValue, tolaratedDiff, parameter->getName(1024) + juce::String(" not restored on setStateInformation"));
+            // okay right, SO...
+            if (isBool) {
+                ut.expectWithinAbsoluteError(parameter->getValue(), originalValue, tolaratedDiff, parameter->getName(1024) + juce::String(" not restored on setStateInformation (But was a bool)"));
+            } else {
+                ut.expectWithinAbsoluteError(parameter->getValue(), originalValue, tolaratedDiff, parameter->getName(1024) + juce::String(" not restored on setStateInformation"));
+            }
         }
 
         if (strictnessLevel >= 8) {
